@@ -18937,8 +18937,12 @@ PbkAAAAASUVORK5CYII=
 <ul>
 <li>The first and second components explain 71.79% of the total variance. </li>
 <li>The first four principal components explain 93.38% of the total variance.</li>
-<li>The first dimension best represents how much less than the mean is the log of the expenditure in Detergents_Paper, Milk and Grocery. The second component best represents how much less than the mean is the log of expenditures of the other three features: Fresh, Frozen and Delicatessen. The third dimension best represents the difference between the deviations from the mean of the log of expenditures of Delicatessen and Fresh; and the fourth dimension best represents the difference between the deviations from the mean of the log expenditure in Frozen and Delicatessen. It is however hard to interpret these dimensions in a simple way, and one has to remember that the quantities transformed are not the original expenditures but the logs of those amounts minus the mean of the log of the feature values, for each feature.</li>
+<li>The first dimension can be interpreted as how much expenditure corresponds to the categories Detergents_Paper, Milk and Grocery. Looking at the weights of these three features, one can see that they dominate as they are all bigger, in absolute value, than the weights assigned to the other three features. Customers that spend relatively high amounts in these three categories, would have a relatively big negative value on this dimension; and customers that spend little in these three features would, in contrast, have a positive value on this dimension. Therefore, this dimension serves to separate customers that spend little from customers that spend significant amounts in Detergents_Paper, Milk and Grocery, for example, a large retailer, from a small cafe.</li>
+<li>The second dimension represents the expenditure in the other three features: Fresh, Frozen and Delicatessen. Again, this is due to the weights of these three features dominating, because of their relatively big (negative) values. In this case, customers that spend relatively big amounts in Fresh, Frozen and Delicatessen, will have relatively big negative values, whereas customers that spend little in this category will have positive values in this dimension.</li>
+<li>Looking at the weights composing the third dimension, one can see that it mainly represents the difference between expenditures in Delicatessen and Fresh. For example, a specialized shop that spends a lot on Delicatessen and little on Fresh, would be separated, along this dimension, from one that spends a lot on Fresh and doesn't spend much on Delicatessen.</li>
+<li>The fourth dimension, similarly, mainly represents the difference in expenditure between Frozen and Delicatessen. So a restaurant that heats frozen food and serves it, with little expenditure on Delicatessen, would be on the opposite side, along the fourth dimension, of a Delicatessen shop that doesn't buy Frozen products. </li>
 </ul>
+<p>Note: the PCA algorithm cares about the dimensions along which the data points vary the most, starting with the dimension of highest variation; but it doesn't care about the direction considered positive along that dimension, since the variance along it doesn't depend on what points are considered to lie on the positive or negative side. What is important, indeed, is the relative values and signs of the weights assigned to the features in order to find the PCA components, since a change in these (relative values and weights), does change the dimension. Practicaly, this means that the interpretation of the meaning of the components does not change: points that have large/medium/low expenditure in certain features, will still be correctly identified as having large/medium/low expenditure in those features even if the signs of the principal components are reversed.</p>
 
 </div>
 </div>
@@ -19352,7 +19356,7 @@ PbkAAAAASUVORK5CYII=
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>&lt;matplotlib.axes._subplots.AxesSubplot at 0x1129240d0&gt;</pre>
+<pre>&lt;matplotlib.axes._subplots.AxesSubplot at 0x112d2d350&gt;</pre>
 </div>
 
 </div>
@@ -20533,7 +20537,7 @@ UdhiQERERERERGGLAREREREREYUtBkRERERERBS2/h/dfr3xp0UX8wAAAABJRU5ErkJggg==
 
 <span class="c1"># TODO: Calculate the mean silhouette coefficient for the number of clusters chosen</span>
 <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">silhouette_score</span>
-<span class="n">score</span> <span class="o">=</span> <span class="n">silhouette_score</span><span class="p">(</span><span class="n">reduced_data</span><span class="p">,</span> <span class="n">preds</span><span class="p">,</span> <span class="n">sample_size</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span>
+<span class="n">score</span> <span class="o">=</span> <span class="n">silhouette_score</span><span class="p">(</span><span class="n">reduced_data</span><span class="p">,</span> <span class="n">preds</span><span class="p">,</span> <span class="n">sample_size</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">metric</span> <span class="o">=</span> <span class="s1">&#39;mahalanobis&#39;</span><span class="p">)</span>
 <span class="k">print</span> <span class="n">score</span>
 </pre></div>
 
@@ -20547,7 +20551,7 @@ UdhiQERERERERGGLAREREREREYUtBkRERERERBS2/h/dfr3xp0UX8wAAAABJRU5ErkJggg==
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>0.414643205697
+<pre>0.379123601926
 </pre>
 </div>
 </div>
@@ -20566,7 +20570,7 @@ UdhiQERERERERGGLAREREREREYUtBkRERERERBS2/h/dfr3xp0UX8wAAAABJRU5ErkJggg==
     <span class="n">clusterer</span> <span class="o">=</span> <span class="n">GaussianMixture</span><span class="p">(</span><span class="n">n_components</span> <span class="o">=</span> <span class="n">n</span><span class="p">,</span> <span class="n">random_state</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
     <span class="n">clusterer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">reduced_data</span><span class="p">)</span>
     <span class="n">preds</span> <span class="o">=</span> <span class="n">clusterer</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">reduced_data</span><span class="p">)</span>
-    <span class="n">score</span> <span class="o">=</span> <span class="n">silhouette_score</span><span class="p">(</span><span class="n">reduced_data</span><span class="p">,</span> <span class="n">preds</span><span class="p">,</span> <span class="n">sample_size</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span>
+    <span class="n">score</span> <span class="o">=</span> <span class="n">silhouette_score</span><span class="p">(</span><span class="n">reduced_data</span><span class="p">,</span> <span class="n">preds</span><span class="p">,</span> <span class="n">sample_size</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">metric</span> <span class="o">=</span> <span class="s1">&#39;mahalanobis&#39;</span><span class="p">)</span>
     <span class="k">print</span> <span class="s2">&quot;For n_components = {0}, silhouette_score = {1}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">score</span><span class="p">)</span> 
 </pre></div>
 
@@ -20580,15 +20584,15 @@ UdhiQERERERERGGLAREREREREYUtBkRERERERBS2/h/dfr3xp0UX8wAAAABJRU5ErkJggg==
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>For n_components = 10, silhouette_score = 0.286451180682
-For n_components = 9, silhouette_score = 0.289292173208
-For n_components = 8, silhouette_score = 0.345249555297
-For n_components = 7, silhouette_score = 0.295974541155
-For n_components = 6, silhouette_score = 0.316092569154
-For n_components = 5, silhouette_score = 0.228586122869
-For n_components = 4, silhouette_score = 0.326748020964
-For n_components = 3, silhouette_score = 0.196133328533
-For n_components = 2, silhouette_score = 0.414643205697
+<pre>For n_components = 10, silhouette_score = 0.287811785028
+For n_components = 9, silhouette_score = 0.286140978817
+For n_components = 8, silhouette_score = 0.337940496679
+For n_components = 7, silhouette_score = 0.292506811756
+For n_components = 6, silhouette_score = 0.315054727364
+For n_components = 5, silhouette_score = 0.223276583124
+For n_components = 4, silhouette_score = 0.307904925151
+For n_components = 3, silhouette_score = 0.162174695662
+For n_components = 2, silhouette_score = 0.379123601926
 </pre>
 </div>
 </div>
@@ -20613,7 +20617,7 @@ For n_components = 2, silhouette_score = 0.414643205697
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer:</strong>
-The best silhouette score obtained was 0.4146, which corresponded to 2 clusters.</p>
+The best silhouette score obtained was 0.3791 (using the mahalanobis distance), which corresponded to 2 clusters.</p>
 
 </div>
 </div>
@@ -21697,7 +21701,8 @@ Sample point 2 predicted to be in Cluster 0
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer:</strong></p>
 <ul>
-<li>The wholesale distributor could design the A/B tests bearing in mind that customers in one segment might prefer a delivery with a frequency of 5 days a week and the other segment might prefer a delivery with frequency of 3 days a week. For example, a customer that runs a cafe or a restaurant might prefer a more frequent delivery because it might have a higher turnover rate (sales of products) than a supermarket. The wholesale distributor should choose their A/B tests samples to be representative of both segments and then randomly assign elements of both segments to both variants, A and B, in order to avoid experiment bias. With the results of the test, the distributor could then decide which delivery service to assign to each segment. Without having this segmentation, the distributor could choose a delivery service that certain types of customers would not like, and therefore loose customers.</li>
+<li>Since two segments have been identified based on the expenditures of customers, which could be well related to the type and size of customers; one would expect that a change in the delivery service, would affect the segments differently. For example, a customer that runs a cafe or a restaurant might prefer a more frequent delivery service because it might have a higher turnover rate (sales of products) than a supermarket.</li>
+<li>The wholesale distributor should perform two A/B tests, one for each segment. For one of these tests, the wholesale distributor should choose a representative sample of customers in segment 1, and for the other, a representative sample of customers in segment 2. This has the advantage of testing how the change would affect the clusters separately. Without considering this segmentation, the distributor could choose a general delivery service that certain types of customers would not like, and therefore loose customers.</li>
 </ul>
 
 </div>
